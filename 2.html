@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quiz & Carousel</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f2f2f2;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    .nav-buttons button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .section {
+      display: none;
+      margin-top: 30px;
+    }
+
+    .active {
+      display: block;
+    }
+
+    /* Quiz Styles */
+    .quiz-container {
+      max-width: 500px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+    }
+
+    .question {
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .options button {
+      display: block;
+      width: 100%;
+      margin: 8px 0;
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    .result {
+      margin-top: 20px;
+      font-size: 1.2rem;
+    }
+
+    /* Carousel Styles */
+    .carousel-container {
+      max-width: 600px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+    }
+
+    .carousel-container img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+    }
+
+    .carousel-buttons {
+      margin-top: 15px;
+    }
+
+    .carousel-buttons button {
+      padding: 10px 20px;
+      margin: 0 10px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>JavaScript Projects: Quiz & Carousel</h1>
+  <div class="nav-buttons">
+    <button onclick="showSection('quiz')">Start Quiz</button>
+    <button onclick="showSection('carousel')">View Carousel</button>
+  </div>
+
+  <!-- Quiz Section -->
+  <div id="quiz" class="section quiz-container">
+    <div id="question" class="question"></div>
+    <div id="options" class="options"></div>
+    <div id="result" class="result"></div>
+  </div>
+
+  <!-- Carousel Section -->
+  <div id="carousel" class="section carousel-container">
+    <img id="carousel-image" src="https://via.placeholder.com/600x400?text=Image+1" alt="Image Carousel">
+    <div class="carousel-buttons">
+      <button onclick="prevImage()">Previous</button>
+      <button onclick="nextImage()">Next</button>
+    </div>
+  </div>
+
+  <script>
+    // Navigation
+    function showSection(id) {
+      document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    // === QUIZ FUNCTIONALITY ===
+    const quizData = [
+      {
+        question: "What is 2 + 2?",
+        options: ["3", "4", "5", "6"],
+        answer: "4"
+      },
+      {
+        question: "What is the capital of Italy?",
+        options: ["Rome", "Paris", "Berlin", "Madrid"],
+        answer: "Rome"
+      },
+      {
+        question: "Which language runs in a web browser?",
+        options: ["Python", "Java", "C++", "JavaScript"],
+        answer: "JavaScript"
+      }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    function loadQuestion() {
+      const q = quizData[currentQuestion];
+      document.getElementById("question").textContent = q.question;
+      const optionsDiv = document.getElementById("options");
+      optionsDiv.innerHTML = "";
+
+      q.options.forEach(option => {
+        const btn = document.createElement("button");
+        btn.textContent = option;
+        btn.onclick = () => checkAnswer(option);
+        optionsDiv.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(selected) {
+      if (selected === quizData[currentQuestion].answer) {
+        score++;
+      }
+      currentQuestion++;
+      if (currentQuestion < quizData.length) {
+        loadQuestion();
+      } else {
+        document.getElementById("question").textContent = "";
+        document.getElementById("options").innerHTML = "";
+        document.getElementById("result").textContent = `You scored ${score} out of ${quizData.length}`;
+      }
+    }
+
+    // Load first quiz question
+    loadQuestion();
+
+    // === CAROUSEL FUNCTIONALITY ===
+    const images = [
+      "https://via.placeholder.com/600x400?text=Image+1",
+      "https://via.placeholder.com/600x400?text=Image+2",
+      "https://via.placeholder.com/600x400?text=Image+3"
+    ];
+    let currentIndex = 0;
+
+    function showImage(index) {
+      document.getElementById("carousel-image").src = images[index];
+    }
+
+    function prevImage() {
+      currentIndex = (currentIndex - 1 + images.length) % images.length;
+      showImage(currentIndex);
+    }
+
+    function nextImage() {
+      currentIndex = (currentIndex + 1) % images.length;
+      showImage(currentIndex);
+    }
+
+    // Show default section
+    showSection('quiz');
+  </script>
+
+</body>
+</html>
